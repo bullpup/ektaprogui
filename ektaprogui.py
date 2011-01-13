@@ -38,6 +38,7 @@ import serial
 import time
 import tkMessageBox
 import tkSimpleDialog
+import os
 
 
 
@@ -1279,12 +1280,22 @@ class InterpretHEXDialog(tkSimpleDialog.Dialog):
             tkMessageBox.showinfo("Command Result", \
                                    "Interpreted Command: " + message)
         
+
+class NullDevice():
+    def write(self, s):
+        pass
         
         
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
+    
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.CRITICAL)
+
+    if os.name == "nt":
+        import sys
+        sys.stderr = NullDevice()
+        sys.stdout = NullDevice()
 
     mainWindow = EktaproGUI()
     mainWindow.mainloop()
