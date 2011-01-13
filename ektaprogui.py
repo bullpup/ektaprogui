@@ -1,6 +1,8 @@
 #!/usr/bin/env python
-
 """
+
+   EktaproGUI v1.0
+   
 
    Copyright 2010 Julian Hoch
 
@@ -16,6 +18,13 @@
    See the License for the specific language governing permissions and
    limitations under the License.
    
+   
+   
+   This program serves as a controller for the ektapro slide projector
+   devices. It searches for slide projector devices on the serial
+   ports on startup, and presents a GUI to manually control
+   the projectors or use a timer for automatic slideshows. Currently,
+   only one projector per serial port is supported.
 """
 
 
@@ -1151,6 +1160,8 @@ class EktaproGUI(Tk):
 
 
     def gotoSlideChanged(self, event):
+        if self.controller.activeDevice is None:
+            return
         newSlide = self.gotoSlideScale.get()
         if not self.slide == newSlide:
             self.controller.activeDevice.gotoSlide(newSlide)
@@ -1158,12 +1169,16 @@ class EktaproGUI(Tk):
 
   
     def nextSlidePressed(self):
+        if self.controller.activeDevice is None:
+            return
         self.timerController.fadePaused = False
         self.timerController.nextSlide()
         self.updateGUI()
 
         
     def prevSlidePressed(self):
+        if self.controller.activeDevice is None:
+            return
         self.timerController.fadePaused = False
         self.timerController.previousSlide()
         self.updateGUI()
